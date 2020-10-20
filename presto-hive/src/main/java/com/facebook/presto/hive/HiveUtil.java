@@ -175,7 +175,13 @@ public final class HiveUtil
     private static final String VIEW_PREFIX = "/* Presto View: ";
     private static final String VIEW_SUFFIX = " */";
 
-    private static final DateTimeFormatter HIVE_DATE_PARSER = ISODateTimeFormat.date().withZoneUTC();
+    private static final DateTimeFormatter HIVE_DATE_PARSER = new DateTimeFormatterBuilder().append(
+            ISODateTimeFormat.date().getPrinter(),
+            new DateTimeParser[]{
+                    ISODateTimeFormat.date().getParser(),
+                    ISODateTimeFormat.basicDate().getParser()
+            }
+        ).toFormatter().withZoneUTC();
     private static final DateTimeFormatter HIVE_TIMESTAMP_PARSER;
     private static final Field COMPRESSION_CODECS_FIELD;
 
