@@ -707,7 +707,11 @@ abstract class AbstractOrcRecordReader<T extends StreamReader>
         ImmutableMap.Builder<Integer, ColumnStatistics> statistics = ImmutableMap.builder();
         for (int ordinal = 0; ordinal < rootStructType.getFieldCount(); ordinal++) {
             if (fileStats.size() > ordinal) {
-                ColumnStatistics element = fileStats.get(rootStructType.getFieldTypeIndex(ordinal));
+                ColumnStatistics element = null;
+                int idx = rootStructType.getFieldTypeIndex(ordinal);
+                if (fileStats.size() > idx) {
+                    element = fileStats.get(idx);
+                }
                 if (element != null) {
                     statistics.put(ordinal, element);
                 }
